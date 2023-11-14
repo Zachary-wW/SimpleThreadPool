@@ -13,10 +13,15 @@
 
 class ThreadPool {
 public:
+    // size_t类型是取当前运行平台的可能的最大整数值
     ThreadPool(size_t);
-    template<class F, class... Args>
+
+    // 模板编程中class和typename是一样的效果
+    template<class F, class... Args> // 可变参模板编程
     auto enqueue(F&& f, Args&&... args) 
         -> std::future<typename std::result_of<F(Args...)>::type>;
+
+
     ~ThreadPool();
 private:
     // need to keep track of threads so we can join them
