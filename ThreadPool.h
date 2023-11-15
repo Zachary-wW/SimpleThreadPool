@@ -17,9 +17,10 @@ public:
     ThreadPool(size_t);
 
     // 模板编程中class和typename是一样的效果
+    // 如果使用正常的函数定义形式 无法直接获取temple的类型（declval除外）
     template<class F, class... Args> // 可变参模板编程
     auto enqueue(F&& f, Args&&... args) 
-        -> std::future<typename std::result_of<F(Args...)>::type>;
+        -> std::future<typename std::result_of<F(Args...)>::type>;// return type
 
 
     ~ThreadPool();
@@ -27,6 +28,7 @@ private:
     // need to keep track of threads so we can join them
     std::vector< std::thread > workers;
     // the task queue
+    // 使用function绑定一个void ()类型函数
     std::queue< std::function<void()> > tasks;
     
     // synchronization
